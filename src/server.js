@@ -1,6 +1,8 @@
 // Create a simple server using express.js
 const bodyParser = require("body-parser");
 var express = require("express");
+var cors = require("cors");
+
 const { MongoClient, ServerApiVersion, ObjectId} = require('mongodb');
 
 var app = express();
@@ -10,12 +12,11 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(cors(
   {
-    origin: 'https://landing-eisc-metaverse-client.vercel.app/',
+    origin: process.env.CLIENT_URL,
   }
 ))
-
 const port = process.env.PORT || 3000;
-const uri = "mongodb+srv://homedekorbylucelly:LQMqDeT8hrsXfefL@cluster0.w7tayqs.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+const uri = process.env.URI_MONGODB;
 
 const client = new MongoClient(uri, {
     serverApi: {
@@ -93,21 +94,3 @@ app.put('/', async function (req, res) {
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
 })
-
-// Create a simple server using node.js
-
-// const http = require("node:http");
-
-// const hostname = "127.0.0.1";
-// const port = 3000;
-
-// const server = http.createServer((req, res)=>{
-//     res.statusCode = 200;
-//     res.setHeader("Content-Type", "text/plain");
-//     res.end("Hello World\n");
-// });
-
-// server.listen(port, hostname, ()=>{
-//     console.log(`Server running at http://${hostname}:${port}`);
-// })
-
