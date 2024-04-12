@@ -8,6 +8,11 @@ var app = express();
 // Middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(cors(
+  {
+    origin: 'https://landing-eisc-metaverse-client.vercel.app/',
+  }
+))
 
 const port = process.env.PORT || 3000;
 const uri = "mongodb+srv://homedekorbylucelly:LQMqDeT8hrsXfefL@cluster0.w7tayqs.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
@@ -55,10 +60,10 @@ app.post("/", async (req, res) => {
 
 app.put('/', async function (req, res) {
     try {
-      const personId = req.params.id;
+      const personId = req.body.id;
       const updatedPerson = req.body;
       const result = await client.db("test").collection("persons").updateOne(
-        { _id: ObjectId(personId) },
+        { _id: new ObjectId(personId) },
         { $set: updatedPerson }
       );
       if (result.modifiedCount > 0) {
@@ -73,7 +78,7 @@ app.put('/', async function (req, res) {
   
   app.delete('/', async function (req, res) {
     try {
-      const personId = req.params.id;
+      const personId = req.body.id;
       const result = await client.db("test").collection("persons").deleteOne({ _id: ObjectId(personId) });
       if (result.deletedCount > 0) {
         res.status(200).send("Person deleted successfully");
